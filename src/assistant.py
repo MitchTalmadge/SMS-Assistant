@@ -8,6 +8,7 @@ import google.oauth2.credentials
 import os
 import json
 import logging
+from typing import Tuple
 
 ASSISTANT_API_ENDPOINT = "embeddedassistant.googleapis.com"
 DEFAULT_GRPC_DEADLINE = 60 * 3 + 5
@@ -39,7 +40,7 @@ class TextAssistant:
 
         self.assistant = embedded_assistant_pb2_grpc.EmbeddedAssistantStub(grpc_channel)
 
-    def assist(self, query: str) -> str:
+    def assist(self, query: str) -> Tuple[str, str]:
         def iter_assist_requests():
             config = embedded_assistant_pb2.AssistConfig(
                 audio_out_config=embedded_assistant_pb2.AudioOutConfig(
@@ -62,10 +63,13 @@ class TextAssistant:
             yield req
 
         text_response = None
+        html_response = None
         for resp in self.assistant.Assist(
             iter_assist_requests(), DEFAULT_GRPC_DEADLINE
         ):
+            if resp.screen_out.data:
+                html_response = resp.screen_out.data
             if resp.dialog_state_out.supplemental_display_text:
                 text_response = resp.dialog_state_out.supplemental_display_text
         
-        return text_response
+        return text_response, html_response

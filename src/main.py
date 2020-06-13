@@ -19,7 +19,7 @@ def on_sms_inbound():
       "Message received - From: %s, To: %s, Text: %s" % (from_number, to_number, text)
   )
 
-  response = assistant.TextAssistant().assist(text)
-  print(f"Response: {response}")
+  response_text, response_html = assistant.TextAssistant().assist(text)
+  print(f"Response: {response_text}")
 
-  return response if response else "Could not contact Google"
+  return response_text if response_text else "Google returned no information for this query."
