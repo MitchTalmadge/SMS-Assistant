@@ -1,10 +1,10 @@
 import click
 import logging
 import os
-import assistant
-from flask import Flask, request
+import querysource.google_assistant
+import querysource.google_web
 
-GOOGLE_KEYWORD = "google "
+from flask import Flask, request
 
 # Setup logging
 logging.basicConfig(level=logging.DEBUG if os.getenv("VERBOSE") else logging.INFO)
@@ -18,18 +18,25 @@ def on_sms_inbound():
     from_number = request.values.get("From")
     to_number = request.values.get("To")
     text: str = request.values.get("Text")
-    print(
+    logging.info(
         "Message received - From: %s, To: %s, Text: %s" % (from_number, to_number, text)
     )
 
-    if text.startswith(GOOGLE_KEYWORD):
-        return ask_google(text[len(GOOGLE_KEYWORD) :])
+    try:
+        response = (
+            f"G Assistant: {query_google_assistant(text)}\n"
+            f"G Web: {query_google_web(text)}"
+        )
 
-    return "No keyword specified."
+        logging.info(f"Response: {response}")
+        return response
+    except Exception as err:
+        logging.exception(err)
+        return f"Internal error: {err}"
 
-def ask_google(query: str) -> str:
-    response_text, response_html = assistant.TextAssistant().assist(query)
-    print(f"Response: {response_text}")
+
+def query_google_assistant(query: str) -> str:
+    response_text, response_html = querysource.google_assistant.TextAssistant().assist(query)
 
     return (
         response_text
@@ -37,3 +44,7 @@ def ask_google(query: str) -> str:
         else "Google returned no information for this query."
     )
 
+
+def query_google_web(query: str) -> str:
+    response = querysource.google_web.GoogleWeb().search(query)
+    return response if response else "Google returned no information for this query."
