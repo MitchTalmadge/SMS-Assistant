@@ -19,7 +19,7 @@ class GoogleAssistant:
         super().__init__()
 
         try:
-            with open(os.getenv("GOOGLE_CREDENTIALS_PATH"), "r") as f:
+            with open(os.getenv("GASSIST_CREDENTIALS_PATH"), "r") as f:
                 credentials = google.oauth2.credentials.Credentials(
                     token=None, **json.load(f)
                 )
@@ -49,8 +49,8 @@ class GoogleAssistant:
                     volume_percentage=0,
                 ),
                 device_config=embedded_assistant_pb2.DeviceConfig(
-                    device_id=os.getenv("GOOGLE_DEVICE_ID"),
-                    device_model_id=os.getenv("GOOGLE_DEVICE_MODEL_ID"),
+                    device_id=os.getenv("GASSIST_DEVICE_ID"),
+                    device_model_id=os.getenv("GASSIST_DEVICE_MODEL_ID"),
                 ),
                 dialog_state_in=embedded_assistant_pb2.DialogStateIn(
                     language_code="en-US",
