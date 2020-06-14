@@ -4,6 +4,7 @@ ENV BASENAME=""
 ENV FLASK_APP=/app/src/main.py
 ENV HOST=0.0.0.0
 ENV PORT=5000
+ENV GOOGLE_CREDENTIALS_PATH=/app/config/credentials.json
 
 # Setup working environment
 RUN mkdir /app
