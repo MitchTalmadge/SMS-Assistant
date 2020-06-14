@@ -22,6 +22,9 @@ def on_sms_inbound():
         "Message received - From: %s, To: %s, Text: %s" % (from_number, to_number, text)
     )
 
+    if not text:
+        return "No query supplied"
+
     try:
         response = (
             f"G Assistant: {query_google_assistant(text)}\n"
