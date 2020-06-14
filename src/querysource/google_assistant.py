@@ -14,7 +14,7 @@ ASSISTANT_API_ENDPOINT = "embeddedassistant.googleapis.com"
 DEFAULT_GRPC_DEADLINE = 60 * 3 + 5
 
 
-class TextAssistant:
+class GoogleAssistant:
     def __init__(self):
         super().__init__()
 

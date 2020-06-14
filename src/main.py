@@ -39,7 +39,7 @@ def on_sms_inbound():
 
 
 def query_google_assistant(query: str) -> str:
-    response_text, response_html = querysource.google_assistant.TextAssistant().assist(query)
+    response_text, response_html = querysource.google_assistant.GoogleAssistant().assist(query)
 
     return (
         response_text
