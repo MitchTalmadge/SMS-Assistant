@@ -8,6 +8,8 @@ class GoogleWeb:
         super().__init__()
 
         self.chrome_options = Options()
+        self.chrome_options.add_argument("--no-sandbox")
+        self.chrome_options.add_argument("--disable-dev-shm-usage")
         self.chrome_options.add_argument("--window-size=1024x768")
         self.chrome_options.add_argument("--headless")
         self.driver = webdriver.Chrome(chrome_options=self.chrome_options)
