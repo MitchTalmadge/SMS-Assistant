@@ -2,3 +2,4 @@
 **/__pycache__
 config
 docker-compose.yml
+py-env

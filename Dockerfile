@@ -1,5 +1,6 @@
 FROM joyzoursky/python-chromedriver:3.8
 
+ENV BASENAME=""
 ENV FLASK_APP=/app/src/main.py
 ENV HOST=0.0.0.0
 ENV PORT=5000

@@ -11,9 +11,9 @@ logging.basicConfig(level=logging.DEBUG if os.getenv("VERBOSE") else logging.INF
 
 # Start flask
 app = Flask(__name__)
+BASENAME = os.getenv("BASENAME")
 
-
-@app.route("/inbound", methods=["GET", "POST"])
+@app.route(f"{BASENAME}/inbound", methods=["GET", "POST"])
 def on_sms_inbound():
     from_number = request.values.get("From")
     to_number = request.values.get("To")
