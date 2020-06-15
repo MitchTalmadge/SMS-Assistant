@@ -20,9 +20,10 @@ def on_sms_inbound():
 
     query: str = request.values.get("query")
     if not query:
+        logging.info("No query provided.")
         return "No query supplied"
 
-    logging.info(f"Query Received: {query}")
+    logging.info(f"Query: {query}")
 
     try:
         response = (
