@@ -13,24 +13,22 @@ logging.basicConfig(level=logging.DEBUG if os.getenv("VERBOSE") else logging.INF
 app = Flask(__name__)
 BASENAME = os.getenv("BASENAME")
 
+
 @app.route(f"{BASENAME}/inbound", methods=["GET", "POST"])
 def on_sms_inbound():
-    from_number = request.values.get("From")
-    to_number = request.values.get("To")
-    text: str = request.values.get("Text")
-    logging.info(
-        "Message received - From: %s, To: %s, Text: %s" % (from_number, to_number, text)
-    )
+    logging.info("Inbound request received.")
 
-    if not text:
+    query: str = request.values.get("query")
+    if not query:
         return "No query supplied"
+
+    logging.info(f"Query Received: {query}")
 
     try:
         response = (
-            f"G Assistant: {query_google_assistant(text)}\n"
-            f"G Web: {query_google_web(text)}"
+            f"G Assistant: {query_google_assistant(query)}\n"
+            f"G Web: {query_google_web(query)}"
         )
-
         logging.info(f"Response: {response}")
         return response
     except Exception as err:
@@ -39,7 +37,10 @@ def on_sms_inbound():
 
 
 def query_google_assistant(query: str) -> str:
-    response_text, response_html = querysource.google_assistant.GoogleAssistant().assist(query)
+    (
+        response_text,
+        response_html,
+    ) = querysource.google_assistant.GoogleAssistant().assist(query)
 
     return (
         response_text
